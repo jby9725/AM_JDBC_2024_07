@@ -1,5 +1,7 @@
 package org.koreait;
 
+import org.koreait.dto.Article;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

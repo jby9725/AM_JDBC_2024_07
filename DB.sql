@@ -60,4 +60,3 @@ VALUES
 SELECT * FROM article;
 SELECT * FROM `member`;
 
-
