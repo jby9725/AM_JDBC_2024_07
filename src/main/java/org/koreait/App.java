@@ -2,11 +2,8 @@ package org.koreait;
 
 import org.koreait.controller.ArticleController;
 import org.koreait.controller.MemberController;
-import org.koreait.util.DBUtil;
-import org.koreait.util.SecSql;
 
 import java.sql.*;
-import java.util.*;
 
 public class App {
 
@@ -65,11 +62,12 @@ public class App {
         if (cmd.equals("exit")) {
             return -1;
         }
-        ///////////////////////////////////////// member /////////////////////////////////
 
+        ///////////////////////////////////////// member /////////////////////////////////
         if (cmd.equals("member join")) {
             memberController.doJoin();
         }
+
         ///////////////////////////////////////// article /////////////////////////////////
         else if (cmd.equals("article write")) {
             articleController.doWrite();

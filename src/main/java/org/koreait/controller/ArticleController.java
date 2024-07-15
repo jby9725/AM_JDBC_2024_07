@@ -3,13 +3,9 @@ package org.koreait.controller;
 import org.koreait.Container;
 import org.koreait.dto.Article;
 import org.koreait.service.ArticleService;
-import org.koreait.util.DBUtil;
-import org.koreait.util.SecSql;
 
 import java.sql.Connection;
 import java.util.List;
-import java.util.Map;
-
 
 public class ArticleController {
 
