@@ -16,7 +16,12 @@ public class MemberService {
         return memberDao.isLoginIdDuplicate(conn, loginId);
     }
 
+    public boolean loginCheck(Connection conn, String userId, String password) {
+        return memberDao.loginCheckIdandPwd(conn, userId, password);
+    }
+
     public int memberJoin(Connection conn, String userId, String password, String nickname) {
         return memberDao.insertMember(conn, userId, password, nickname);
     }
+
 }

@@ -21,6 +21,17 @@ public class MemberDao {
         return DBUtil.selectRowBooleanValue(conn, sql);
     }
 
+    public boolean loginCheckIdandPwd(Connection conn, String userId, String password) {
+        SecSql sql = new SecSql();
+
+        sql.append("SELECT COUNT(*) > 0");
+        sql.append("FROM `member`");
+        sql.append("WHERE `userId` = ?", userId);
+        sql.append("AND `password` = ?;", password);
+
+        return DBUtil.selectRowBooleanValue(conn, sql);
+    }
+
     public int insertMember(Connection conn, String userId, String password, String nickname) {
         // 데이터 삽입..
         SecSql sql = new SecSql();
@@ -34,4 +45,5 @@ public class MemberDao {
 
         return id;
     }
+
 }

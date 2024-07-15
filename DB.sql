@@ -31,6 +31,7 @@ SELECT RAND();
 SELECT SUBSTRING(RAND() * 1000 FROM 1 FOR 2);
 
 -- 문자열 붙이기 + 랜덤 수 출력
+## author 붙이기 전
 INSERT INTO article
 SET regDate = NOW(),
     updateDate = NOW(),
@@ -60,3 +61,20 @@ VALUES
 SELECT * FROM article;
 SELECT * FROM `member`;
 
+# TODO
+# 작성자(article list, article detail ## 수정, 삭제 권한 체크
+ALTER TABLE `article` ADD `author` int NOT NULL;
+
+ALTER TABLE `article` ADD CONSTRAINT FK_autor FOREIGN KEY(author)
+    REFERENCES `member`(id) ON DELETE set null; ON UPDATE set null;
+
+-- 문자열 붙이기 + 랜덤 수 출력
+## author 붙이기 전
+
+
+INSERT INTO article
+SET regDate = NOW(),
+    updateDate = NOW(),
+    title = CONCAT('제목', SUBSTRING(RAND() * 1000 FROM 1 FOR 2)),
+    `body` = CONCAT('내용', SUBSTRING(RAND() * 1000 FROM 1 FOR 2)),
+    `author` = 1;

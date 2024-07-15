@@ -11,6 +11,8 @@ public class MemberController {
 
     private MemberService memberService;
 
+    private String loginedId = "";
+
     public MemberController(Connection conn) {
         this.conn = conn;
         this.memberService = new MemberService();
@@ -90,5 +92,70 @@ public class MemberController {
         int id = memberService.memberJoin(conn, userId, password, nickname);
 
         System.out.println(id + "번 멤버가 생성되었습니다.");
+    }
+
+    public boolean doLogin() {
+        String userId = null;
+        String password = null;
+
+        int tryCount = 0;
+        boolean loginPwdCheck = false;
+
+        while (tryCount < 3) {
+            System.out.print("로그인 아이디 : ");
+            userId = Container.getScanner().nextLine();
+
+            if (userId.length() == 0 || userId.contains(" ")) {
+                System.out.println("아이디 재입력 필요");
+                continue;
+            }
+
+
+            boolean this_id_in_db = memberService.isLoginIdDuplicate(conn, userId);
+
+            if (!this_id_in_db) {
+                loginPwdCheck = false;
+                System.out.println("아이디가 데이터베이스 내에 없습니다. 다시 입력해주세요. 남은 시도 횟수 : " + (2 - tryCount));
+                tryCount++;
+                continue;
+
+            } else {
+                while (true) {
+                    System.out.print("비밀번호 : ");
+                    password = Container.getScanner().nextLine().trim();
+                    if (password.length() == 0 || password.contains(" ")) {
+                        System.out.println("비밀번호를 다시 입력해주세요.");
+                        continue;
+                    }
+                    break;
+                }
+
+                loginPwdCheck = memberService.loginCheck(conn, userId, password);
+//                System.out.println("loginPwdCheck : " + loginPwdCheck);
+            }
+
+            if (loginPwdCheck) {
+                this.loginedId = userId;
+                break;
+            } else {
+                this.loginedId = null;
+                System.out.println("일치하는 정보가 데이터베이스 내에 없습니다. 남은 시도 횟수 : " + (2 - tryCount));
+            }
+            tryCount++;
+        }
+
+        if (loginPwdCheck) {
+            System.out.println("로그인 성공");
+            return true;
+        } else {
+            System.out.println("로그인 실패");
+            return false;
+        }
+
+    }
+
+    public void doLogout() {
+        this.loginedId = null;
+        System.out.println("로그아웃 되었습니다.");
     }
 }

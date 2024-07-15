@@ -14,7 +14,8 @@ public class App {
     String userName = "root";
     String password = "";
     Connection conn = null;
-    PreparedStatement pstmt = null;
+
+    boolean loginStatus = false;
 
     public void run() {
 
@@ -65,12 +66,39 @@ public class App {
 
         ///////////////////////////////////////// member /////////////////////////////////
         if (cmd.equals("member join")) {
-            memberController.doJoin();
+            if (!loginStatus)
+                memberController.doJoin();
+            else {
+                System.out.println("로그아웃한 상태여야 합니다.");
+                return 0;
+            }
+        } else if (cmd.equals("member login")) {
+            if (!loginStatus) {
+                loginStatus = memberController.doLogin();
+//                System.out.println("loginStatus = " + loginStatus);
+            } else {
+                System.out.println("로그아웃한 상태여야 합니다.");
+                return 0;
+            }
         }
+        if (cmd.equals("member logout")) {
+            if (loginStatus) {
+                memberController.doLogout();
+                loginStatus = false;
+            } else {
+                System.out.println("로그인한 상태여야 합니다.");
+                return 0;
 
+            }
+        }
         ///////////////////////////////////////// article /////////////////////////////////
         else if (cmd.equals("article write")) {
-            articleController.doWrite();
+            if (loginStatus)
+                articleController.doWrite();
+            else {
+                System.out.println("로그인한 상태여야 합니다.");
+                return 0;
+            }
 
         } else if (cmd.equals("article list")) {
             articleController.doShowAll();
@@ -79,10 +107,20 @@ public class App {
             articleController.doShowDetail();
 
         } else if (cmd.equals("article modify")) {
-            articleController.doModify();
+            if (loginStatus)
+                articleController.doModify();
+            else {
+                System.out.println("로그인한 상태여야 합니다.");
+                return 0;
+            }
 
         } else if (cmd.equals("article delete")) {
-            articleController.doDelete();
+            if (loginStatus)
+                articleController.doDelete();
+            else {
+                System.out.println("로그인한 상태여야 합니다.");
+                return 0;
+            }
 
         } else {
             System.out.println("잘못된 명령어");
