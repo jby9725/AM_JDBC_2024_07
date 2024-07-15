@@ -1,6 +1,7 @@
 package org.koreait.controller;
 
 import org.koreait.Container;
+import org.koreait.dto.Member;
 import org.koreait.service.MemberService;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ public class MemberController {
 
     private MemberService memberService;
 
-    private String loginedId = "";
+    private Member loginedMember = null;
 
     public MemberController(Connection conn) {
         this.conn = conn;
@@ -94,68 +95,110 @@ public class MemberController {
         System.out.println(id + "번 멤버가 생성되었습니다.");
     }
 
-    public boolean doLogin() {
+    public Member doLogin() {
         String userId = null;
         String password = null;
 
+        int tryMaxCount = 5;
         int tryCount = 0;
+
         boolean loginPwdCheck = false;
 
-        while (tryCount < 3) {
+        Member rsMember = null;
+        Member checkMember = null;
+
+        while (tryCount < tryMaxCount) {
+            System.out.println("남은 시도 횟수 : " + (tryMaxCount - tryCount - 1));
             System.out.print("로그인 아이디 : ");
             userId = Container.getScanner().nextLine();
 
             if (userId.length() == 0 || userId.contains(" ")) {
+                tryCount++;
                 System.out.println("아이디 재입력 필요");
                 continue;
             }
 
-
+            // 아이디 있는지 없는지.
             boolean this_id_in_db = memberService.isLoginIdDuplicate(conn, userId);
 
             if (!this_id_in_db) {
                 loginPwdCheck = false;
-                System.out.println("아이디가 데이터베이스 내에 없습니다. 다시 입력해주세요. 남은 시도 횟수 : " + (2 - tryCount));
+                System.out.println("아이디가 데이터베이스 내에 없습니다. 다시 입력해주세요. 남은 시도 횟수 : " + (tryMaxCount - tryCount - 1));
                 tryCount++;
                 continue;
 
             } else {
-                while (true) {
+
+                checkMember = memberService.getMemberByLoginId(conn, userId);
+
+                while (tryCount < tryMaxCount) {
+                    System.out.println("남은 시도 횟수 : " + (tryMaxCount - tryCount - 1));
+
                     System.out.print("비밀번호 : ");
                     password = Container.getScanner().nextLine().trim();
                     if (password.length() == 0 || password.contains(" ")) {
                         System.out.println("비밀번호를 다시 입력해주세요.");
+                        tryCount++;
                         continue;
                     }
-                    break;
+
+                    if (!password.equals(checkMember.getPassword())) {
+                        loginPwdCheck = false;
+                        rsMember = null;
+                        tryCount++;
+                        continue;
+                    } else {
+                        loginPwdCheck = true;
+                        rsMember = checkMember;
+                        break;
+                    }
                 }
 
-                loginPwdCheck = memberService.loginCheck(conn, userId, password);
+                if (tryCount >= tryMaxCount) {
+                    System.out.println("로그인 실패");
+                    return null;
+                }
+
+                // loginPwdCheck = memberService.loginCheck(conn, userId, password);
 //                System.out.println("loginPwdCheck : " + loginPwdCheck);
             }
 
-            if (loginPwdCheck) {
-                this.loginedId = userId;
+            if (rsMember != null) {
+                loginedMember = rsMember;
                 break;
             } else {
-                this.loginedId = null;
-                System.out.println("일치하는 정보가 데이터베이스 내에 없습니다. 남은 시도 횟수 : " + (2 - tryCount));
+                loginedMember = null;
+                System.out.println("일치하는 정보가 데이터베이스 내에 없습니다. 남은 시도 횟수 : " + (tryMaxCount - tryCount - 1));
             }
             tryCount++;
         }
 
         if (loginPwdCheck) {
             System.out.println("로그인 성공");
-            return true;
+            System.out.println(rsMember.getNickname() + "님 환영합니다.");
+            return rsMember;
         } else {
             System.out.println("로그인 실패");
-            return false;
+            return null;
         }
 
     }
 
     public void doLogout() {
-        this.loginedId = null;
+        this.loginedMember = null;
         System.out.println("로그아웃 되었습니다.");
+    }
+
+    public void showUserProfile(Member loginMember) {
+        Member member = loginMember;
+        if (member == null) {
+            System.out.println("로그인하지 않았습니다. 프로필을 표시할 수 없습니다.");
+            return;
+        }
+        System.out.println("== 회원 정보 ==");
+        System.out.println("아이디 : " + member.getUserId());
+        System.out.println("비밀번호 : " + member.getPassword());
+        System.out.println("닉네임 : " + member.getNickname());
+        System.out.println("가입 날짜 : " + member.getRegDate());
     }
 }

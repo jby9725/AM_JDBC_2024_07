@@ -1,9 +1,11 @@
 package org.koreait.dao;
 
+import org.koreait.dto.Member;
 import org.koreait.util.DBUtil;
 import org.koreait.util.SecSql;
 
 import java.sql.Connection;
+import java.util.Map;
 
 // DAO는 실제로 DB의 data에 접근하기 위한 객체입니다.
 // 실제로 DB에 접근하여 data를 삽입, 삭제, 조회, 수정 등 CRUD 기능을 수행합니다.
@@ -46,4 +48,18 @@ public class MemberDao {
         return id;
     }
 
+    public Member getMemberByLoginId(Connection conn, String userId) {
+
+        SecSql sql = new SecSql();
+
+        sql.append("SELECT * FROM `member` WHERE `userId` = ?", userId);
+
+        Map<String, Object> memberMap = DBUtil.selectRow(conn, sql);
+
+        if(memberMap.isEmpty()){
+            return null;
+        }
+
+        return new Member(memberMap);
+    }
 }

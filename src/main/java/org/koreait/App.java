@@ -2,6 +2,7 @@ package org.koreait;
 
 import org.koreait.controller.ArticleController;
 import org.koreait.controller.MemberController;
+import org.koreait.dto.Member;
 
 import java.sql.*;
 
@@ -16,6 +17,7 @@ public class App {
     Connection conn = null;
 
     boolean loginStatus = false;
+    Member loginMember = null;
 
     public void run() {
 
@@ -66,34 +68,46 @@ public class App {
 
         ///////////////////////////////////////// member /////////////////////////////////
         if (cmd.equals("member join")) {
-            if (!loginStatus)
+            if (!loginStatus && loginMember == null)
                 memberController.doJoin();
             else {
                 System.out.println("로그아웃한 상태여야 합니다.");
                 return 0;
             }
         } else if (cmd.equals("member login")) {
-            if (!loginStatus) {
-                loginStatus = memberController.doLogin();
-//                System.out.println("loginStatus = " + loginStatus);
+            if (!loginStatus && loginMember == null) {
+                loginMember = memberController.doLogin();
+                if (loginMember != null) {
+                    loginStatus = true;
+//                    System.out.println(loginMember.getUserId());
+//                    System.out.println(loginMember.getNickname());
+                }
+
             } else {
                 System.out.println("로그아웃한 상태여야 합니다.");
                 return 0;
             }
-        }
-        if (cmd.equals("member logout")) {
-            if (loginStatus) {
+        } else if (cmd.equals("member logout")) {
+            if (loginStatus && loginMember != null) {
                 memberController.doLogout();
+                loginMember = null;
                 loginStatus = false;
             } else {
                 System.out.println("로그인한 상태여야 합니다.");
                 return 0;
 
             }
+        } else if (cmd.equals("member profile")) {
+            if (loginStatus && loginMember != null) {
+                memberController.showUserProfile(loginMember);
+            } else {
+                System.out.println("로그인한 상태여야 합니다.");
+                return 0;
+            }
         }
         ///////////////////////////////////////// article /////////////////////////////////
         else if (cmd.equals("article write")) {
-            if (loginStatus)
+            if (loginStatus && loginMember != null)
                 articleController.doWrite();
             else {
                 System.out.println("로그인한 상태여야 합니다.");
@@ -101,13 +115,13 @@ public class App {
             }
 
         } else if (cmd.equals("article list")) {
-            articleController.doShowAll();
+            articleController.showAll();
 
         } else if (cmd.equals("article detail")) {
-            articleController.doShowDetail();
+            articleController.showDetail();
 
         } else if (cmd.equals("article modify")) {
-            if (loginStatus)
+            if (loginStatus && loginMember != null)
                 articleController.doModify();
             else {
                 System.out.println("로그인한 상태여야 합니다.");
@@ -115,7 +129,7 @@ public class App {
             }
 
         } else if (cmd.equals("article delete")) {
-            if (loginStatus)
+            if (loginStatus && loginMember != null)
                 articleController.doDelete();
             else {
                 System.out.println("로그인한 상태여야 합니다.");

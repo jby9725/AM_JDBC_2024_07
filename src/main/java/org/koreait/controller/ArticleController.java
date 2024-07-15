@@ -30,7 +30,7 @@ public class ArticleController {
 
     }
 
-    public void doShowAll() {
+    public void showAll() {
 
         List<Article> articleList = articleService.articleListShowAll(conn);
 
@@ -45,7 +45,7 @@ public class ArticleController {
         }
     }
 
-    public void doShowDetail() {
+    public void showDetail() {
         System.out.print("자세히 볼 게시물의 id : ");
         int id = Container.getScanner().nextInt();
         Container.getScanner().nextLine();
