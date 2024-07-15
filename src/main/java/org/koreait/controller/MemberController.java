@@ -60,7 +60,7 @@ public class MemberController {
 
             while (true) {
                 System.out.print("사용자 비밀번호 확인 : ");
-                pwdConfirm = Container.getScanner().nextLine();
+                pwdConfirm = Container.getScanner().nextLine().trim();
                 if (pwdConfirm.length() == 0 || pwdConfirm.contains(" ")) {
                     System.out.println("확인 비밀번호 재입력 필요");
                     continue;
@@ -79,7 +79,7 @@ public class MemberController {
 
         while (true) {
             System.out.print("사용자 닉네임 : ");
-            nickname = Container.getScanner().nextLine();
+            nickname = Container.getScanner().nextLine().trim();
             if (nickname.length() == 0 || nickname.contains(" ")) {
                 System.out.println("닉네임 재입력 필요");
                 continue;

@@ -26,7 +26,7 @@ public class ArticleService {
         return articleDao.selectAllArticle(conn);
     }
 
-    public Article articleDetail(Connection conn, int id) {
+    public Article getArticleById(Connection conn, int id) {
         return articleDao.selectArticle(conn, id);
     }
 

@@ -32,7 +32,7 @@ public class ArticleDao {
 
     public List<Article> selectAllArticle(Connection conn) {
         // 데이터 조회...
-        List<Article> articles = new ArrayList<Article>();
+        List<Article> articles = new ArrayList<>();
 
         SecSql sql = new SecSql();
         sql.append("SELECT *");
@@ -71,7 +71,7 @@ public class ArticleDao {
         SecSql sql = new SecSql();
         sql.append("SELECT COUNT(*) > 0");
         sql.append("FROM `article`");
-        sql.append("WHERE `id` = ?;", id);
+        sql.append("WHERE id = ?;", id);
 
         return DBUtil.selectRowBooleanValue(conn, sql);
 

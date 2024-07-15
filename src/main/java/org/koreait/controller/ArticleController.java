@@ -20,9 +20,9 @@ public class ArticleController {
     public void doWrite() {
 
         System.out.print("제목 : ");
-        String title = Container.getScanner().nextLine();
+        String title = Container.getScanner().nextLine().trim();
         System.out.print("내용 : ");
-        String body = Container.getScanner().nextLine();
+        String body = Container.getScanner().nextLine().trim();
 
         int id = articleService.articleWrite(conn, title, body);
 
@@ -50,7 +50,7 @@ public class ArticleController {
         int id = Container.getScanner().nextInt();
         Container.getScanner().nextLine();
 
-        Article article = articleService.articleDetail(conn, id);
+        Article article = articleService.getArticleById(conn, id);
 
         System.out.println("== 검색 결과 ==");
         System.out.println("번호 : " + article.getId());
@@ -73,9 +73,9 @@ public class ArticleController {
             return;
         } else {
             System.out.print("게시물의 새 제목 : ");
-            String title = Container.getScanner().nextLine();
+            String title = Container.getScanner().nextLine().trim();
             System.out.print("게시물의 새 내용 : ");
-            String body = Container.getScanner().nextLine();
+            String body = Container.getScanner().nextLine().trim();
 
             int id2 = articleService.articleModify(conn, id, title, body);
 
