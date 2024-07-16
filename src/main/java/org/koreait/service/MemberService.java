@@ -13,19 +13,19 @@ public class MemberService {
         this.memberDao = new MemberDao();
     }
 
-    public boolean isLoginIdDuplicate(Connection conn, String loginId) {
-        return memberDao.isLoginIdDuplicate(conn, loginId);
+    public boolean isLoginIdDuplicate(String loginId) {
+        return memberDao.isLoginIdDuplicate(loginId);
     }
 
-    public boolean loginCheck(Connection conn, String userId, String password) {
-        return memberDao.loginCheckIdandPwd(conn, userId, password);
+    public boolean loginCheck(String userId, String password) {
+        return memberDao.loginCheckIdandPwd(userId, password);
     }
 
-    public int memberJoin(Connection conn, String userId, String password, String nickname) {
-        return memberDao.insertMember(conn, userId, password, nickname);
+    public int memberJoin(String userId, String password, String nickname) {
+        return memberDao.insertMember(userId, password, nickname);
     }
 
-    public Member getMemberByLoginId(Connection conn, String userId) {
-        return memberDao.getMemberByLoginId(conn, userId);
+    public Member getMemberByLoginId(String userId) {
+        return memberDao.getMemberByLoginId(userId);
     }
 }

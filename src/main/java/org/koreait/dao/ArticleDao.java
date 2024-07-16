@@ -4,6 +4,7 @@ package org.koreait.dao;
 // 실제로 DB에 접근하여 data를 삽입, 삭제, 조회, 수정 등 CRUD 기능을 수행합니다.
 // Service와 DB를 연결하는 고리 역할을 합니다.
 
+import org.koreait.Container;
 import org.koreait.dto.Article;
 import org.koreait.util.DBUtil;
 import org.koreait.util.SecSql;
@@ -15,7 +16,9 @@ import java.util.Map;
 
 public class ArticleDao {
 
-    public int insertArticle(Connection conn, String title, String body) {
+    private Connection conn = Container.getConnection();
+
+    public int insertArticle(String title, String body) {
         // 데이터 삽입..
         SecSql sql = new SecSql();
         sql.append("INSERT INTO article");
@@ -30,7 +33,7 @@ public class ArticleDao {
         return id;
     }
 
-    public List<Article> selectAllArticle(Connection conn) {
+    public List<Article> selectAllArticle() {
         // 데이터 조회...
         List<Article> articles = new ArrayList<>();
 
@@ -48,7 +51,7 @@ public class ArticleDao {
         return articles;
     }
 
-    public Article selectArticle(Connection conn, int id) {
+    public Article selectArticle(int id) {
         // 조회...
         SecSql sql = new SecSql();
         sql.append("SELECT *");
@@ -66,7 +69,7 @@ public class ArticleDao {
         return article;
     }
 
-    public boolean isArticleDuplicate(Connection conn, int id) {
+    public boolean isArticleDuplicate(int id) {
         // 조회...
         SecSql sql = new SecSql();
         sql.append("SELECT COUNT(*) > 0");
@@ -77,7 +80,7 @@ public class ArticleDao {
 
     }
 
-    public int updateArticle(Connection conn, int id, String title, String body) {
+    public int updateArticle(int id, String title, String body) {
         // 수정...
         SecSql sql = new SecSql();
         sql.append("UPDATE article");
@@ -93,7 +96,7 @@ public class ArticleDao {
         return id;
     }
 
-    public int deleteArticle(Connection conn, int id) {
+    public int deleteArticle(int id) {
         // 삭제...
         SecSql sql = new SecSql();
         sql.append("DELETE FROM article");

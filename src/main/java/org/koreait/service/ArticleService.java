@@ -14,28 +14,28 @@ public class ArticleService {
         this.articleDao = new ArticleDao();
     }
 
-    public boolean articleDuplicate(Connection conn, int id) {
-        return articleDao.isArticleDuplicate(conn, id);
+    public boolean articleDuplicate(int id) {
+        return articleDao.isArticleDuplicate(id);
     }
 
-    public int articleWrite(Connection conn, String title, String body) {
-        return articleDao.insertArticle(conn, title, body);
+    public int articleWrite(String title, String body) {
+        return articleDao.insertArticle(title, body);
     }
 
-    public List<Article> articleListShowAll(Connection conn) {
-        return articleDao.selectAllArticle(conn);
+    public List<Article> articleListShowAll() {
+        return articleDao.selectAllArticle();
     }
 
-    public Article getArticleById(Connection conn, int id) {
-        return articleDao.selectArticle(conn, id);
+    public Article getArticleById(int id) {
+        return articleDao.selectArticle(id);
     }
 
-    public int articleModify(Connection conn, int id, String title, String body) {
-        return articleDao.updateArticle(conn, id, title, body);
+    public int articleModify(int id, String title, String body) {
+        return articleDao.updateArticle(id, title, body);
     }
 
-    public int articleDelete(Connection conn, int id) {
-        return articleDao.deleteArticle(conn, id);
+    public int articleDelete(int id) {
+        return articleDao.deleteArticle(id);
 
     }
 }

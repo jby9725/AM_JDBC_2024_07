@@ -3,19 +3,13 @@ package org.koreait.controller;
 import org.koreait.Container;
 import org.koreait.dto.Member;
 import org.koreait.service.MemberService;
-
-import java.sql.Connection;
+import org.koreait.session.Session;
 
 public class MemberController {
 
-    private Connection conn;
-
     private MemberService memberService;
 
-    private Member loginedMember = null;
-
-    public MemberController(Connection conn) {
-        this.conn = conn;
+    public MemberController() {
         this.memberService = new MemberService();
     }
 
@@ -38,7 +32,7 @@ public class MemberController {
             }
 
             // 아이디가 중복인지 체크....
-            boolean is_id_not_unique = memberService.isLoginIdDuplicate(conn, userId);
+            boolean is_id_not_unique = memberService.isLoginIdDuplicate(userId);
 
             if (!is_id_not_unique) {
                 break;
@@ -90,7 +84,7 @@ public class MemberController {
             break;
         }
 
-        int id = memberService.memberJoin(conn, userId, password, nickname);
+        int id = memberService.memberJoin(userId, password, nickname);
 
         System.out.println(id + "번 멤버가 생성되었습니다.");
     }
@@ -119,7 +113,7 @@ public class MemberController {
             }
 
             // 아이디 있는지 없는지.
-            boolean this_id_in_db = memberService.isLoginIdDuplicate(conn, userId);
+            boolean this_id_in_db = memberService.isLoginIdDuplicate(userId);
 
             if (!this_id_in_db) {
                 loginPwdCheck = false;
@@ -129,7 +123,7 @@ public class MemberController {
 
             } else {
 
-                checkMember = memberService.getMemberByLoginId(conn, userId);
+                checkMember = memberService.getMemberByLoginId(userId);
 
                 while (tryCount < tryMaxCount) {
                     System.out.println("남은 시도 횟수 : " + (tryMaxCount - tryCount - 1));
@@ -164,10 +158,13 @@ public class MemberController {
             }
 
             if (rsMember != null) {
-                loginedMember = rsMember;
+                Session.setLoginedMember(rsMember); //                loginedMember = rsMember;
+                Session.setLoginedMemberID(rsMember.getId());
                 break;
             } else {
-                loginedMember = null;
+//                loginedMember = null;
+                Session.setLoginedMember(null);
+                Session.setLoginedMemberID(-1);
                 System.out.println("일치하는 정보가 데이터베이스 내에 없습니다. 남은 시도 횟수 : " + (tryMaxCount - tryCount - 1));
             }
             tryCount++;
@@ -185,7 +182,8 @@ public class MemberController {
     }
 
     public void doLogout() {
-        this.loginedMember = null;
+        Session.setLoginedMember(null);
+        Session.setLoginedMemberID(-1);
         System.out.println("로그아웃 되었습니다.");
     }
 

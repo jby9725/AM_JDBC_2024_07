@@ -1,5 +1,6 @@
 package org.koreait.dao;
 
+import org.koreait.Container;
 import org.koreait.dto.Member;
 import org.koreait.util.DBUtil;
 import org.koreait.util.SecSql;
@@ -13,7 +14,9 @@ import java.util.Map;
 
 public class MemberDao {
 
-    public boolean isLoginIdDuplicate(Connection conn, String userId) {
+    private Connection conn = Container.getConnection();
+
+    public boolean isLoginIdDuplicate(String userId) {
         SecSql sql = new SecSql();
 
         sql.append("SELECT COUNT(*) > 0");
@@ -23,7 +26,7 @@ public class MemberDao {
         return DBUtil.selectRowBooleanValue(conn, sql);
     }
 
-    public boolean loginCheckIdandPwd(Connection conn, String userId, String password) {
+    public boolean loginCheckIdandPwd(String userId, String password) {
         SecSql sql = new SecSql();
 
         sql.append("SELECT COUNT(*) > 0");
@@ -34,7 +37,7 @@ public class MemberDao {
         return DBUtil.selectRowBooleanValue(conn, sql);
     }
 
-    public int insertMember(Connection conn, String userId, String password, String nickname) {
+    public int insertMember(String userId, String password, String nickname) {
         // 데이터 삽입..
         SecSql sql = new SecSql();
         sql.append("INSERT INTO `member` (`regDate`, `userId`, `password`, `nickname`) VALUES");
@@ -48,7 +51,7 @@ public class MemberDao {
         return id;
     }
 
-    public Member getMemberByLoginId(Connection conn, String userId) {
+    public Member getMemberByLoginId(String userId) {
 
         SecSql sql = new SecSql();
 

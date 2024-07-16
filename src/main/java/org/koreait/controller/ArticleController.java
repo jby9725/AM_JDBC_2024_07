@@ -4,16 +4,13 @@ import org.koreait.Container;
 import org.koreait.dto.Article;
 import org.koreait.service.ArticleService;
 
-import java.sql.Connection;
 import java.util.List;
 
 public class ArticleController {
 
-    private Connection conn;
     private ArticleService articleService;
 
-    public ArticleController(Connection conn) {
-        this.conn = conn;
+    public ArticleController() {
         this.articleService = new ArticleService();
     }
 
@@ -24,7 +21,7 @@ public class ArticleController {
         System.out.print("내용 : ");
         String body = Container.getScanner().nextLine().trim();
 
-        int id = articleService.articleWrite(conn, title, body);
+        int id = articleService.articleWrite(title, body);
 
         System.out.println(id + "번 게시글이 생성되었습니다.");
 
@@ -32,7 +29,7 @@ public class ArticleController {
 
     public void showAll() {
 
-        List<Article> articleList = articleService.articleListShowAll(conn);
+        List<Article> articleList = articleService.articleListShowAll();
 
         if (articleList.size() == 0) {
             System.out.println("게시글 없음");
@@ -50,7 +47,7 @@ public class ArticleController {
         int id = Container.getScanner().nextInt();
         Container.getScanner().nextLine();
 
-        Article article = articleService.getArticleById(conn, id);
+        Article article = articleService.getArticleById(id);
 
         System.out.println("== 검색 결과 ==");
         System.out.println("번호 : " + article.getId());
@@ -65,7 +62,7 @@ public class ArticleController {
         int id = Container.getScanner().nextInt();
         Container.getScanner().nextLine();
 
-        boolean isFoundArticle = articleService.articleDuplicate(conn, id);
+        boolean isFoundArticle = articleService.articleDuplicate(id);
 
         if (!isFoundArticle) {
             System.out.println(id + "번 글은 없습니다.");
@@ -77,7 +74,7 @@ public class ArticleController {
             System.out.print("게시물의 새 내용 : ");
             String body = Container.getScanner().nextLine().trim();
 
-            int id2 = articleService.articleModify(conn, id, title, body);
+            int id2 = articleService.articleModify(id, title, body);
 
             System.out.println(id2 + "번 글이 수정되었습니다.");
 
@@ -89,7 +86,7 @@ public class ArticleController {
         int id = Container.getScanner().nextInt();
         Container.getScanner().nextLine();
 
-        boolean isFoundArticle = articleService.articleDuplicate(conn, id);
+        boolean isFoundArticle = articleService.articleDuplicate(id);
 
         if (!isFoundArticle) {
             System.out.println(id + "번 글은 없습니다.");
@@ -97,7 +94,7 @@ public class ArticleController {
             return;
         } else {
 
-            int id2 = articleService.articleDelete(conn, id);
+            int id2 = articleService.articleDelete(id);
 
             System.out.println(id2 + "번 글이 삭제되었습니다.");
 
