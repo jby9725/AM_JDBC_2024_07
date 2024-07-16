@@ -43,6 +43,7 @@ public class ArticleDao {
 //        sql.append("SELECT *");
 //        sql.append("FROM article");
 //        sql.append("ORDER BY id DESC");
+
         sql.append("SELECT A.*, M.nickname");
         sql.append("FROM article A");
         sql.append("INNER JOIN `member` M");
@@ -79,8 +80,7 @@ public class ArticleDao {
             return null;
         }
 
-        Article article = new Article(articleMap);
-        return article;
+        return new Article(articleMap);
     }
 
     public boolean isArticleDuplicate(int id) {

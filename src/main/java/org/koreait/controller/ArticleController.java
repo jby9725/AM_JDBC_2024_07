@@ -63,16 +63,19 @@ public class ArticleController {
         int id = Container.getScanner().nextInt();
         Container.getScanner().nextLine();
 
-        boolean isFoundArticle = articleService.articleDuplicate(id);
+        Article foundArticle = articleService.getArticleById(id);
 
-        if (!isFoundArticle) {
+        if (foundArticle == null) {
             System.out.println(id + "번 글은 없습니다.");
 
             return;
         } else {
 
             // 권한 체크 하고 틀리면 return;
-
+            if(foundArticle.getAuthor() != Container.getSession().getLoginedMemberID()) {
+                System.out.println("권한이 없습니다.");
+                return;
+            }
             System.out.print("게시물의 새 제목 : ");
             String title = Container.getScanner().nextLine().trim();
             System.out.print("게시물의 새 내용 : ");
@@ -90,13 +93,19 @@ public class ArticleController {
         int id = Container.getScanner().nextInt();
         Container.getScanner().nextLine();
 
-        boolean isFoundArticle = articleService.articleDuplicate(id);
+        Article foundArticle = articleService.getArticleById(id);
 
-        if (!isFoundArticle) {
+        if (foundArticle == null) {
             System.out.println(id + "번 글은 없습니다.");
 
             return;
         } else {
+
+            // 권한 체크 하고 틀리면 return;
+            if(foundArticle.getAuthor() != Container.getSession().getLoginedMemberID()) {
+                System.out.println("권한이 없습니다.");
+                return;
+            }
 
             int id2 = articleService.articleDelete(id);
 

@@ -2,7 +2,6 @@ package org.koreait;
 
 import org.koreait.controller.ArticleController;
 import org.koreait.controller.MemberController;
-import org.koreait.session.Session;
 
 public class App {
 
@@ -39,7 +38,6 @@ public class App {
         ///////////////////////////////////////// member /////////////////////////////////
         if (cmd.equals("member join")) {
             if (!Container.getSession().isLogined())
-//            if (!loginStatus && loginMember == null)
                 memberController.doJoin();
             else {
                 System.out.println("로그아웃한 상태여야 합니다.");
