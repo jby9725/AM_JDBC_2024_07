@@ -3,8 +3,9 @@ package org.koreait.service;
 import org.koreait.dao.ArticleDao;
 import org.koreait.dto.Article;
 
-import java.sql.Connection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ArticleService {
 
@@ -38,4 +39,19 @@ public class ArticleService {
         return articleDao.deleteArticle(id);
 
     }
+
+    public List<Article> getForPrintArticles(int page, int itemsInAPage, String searchKeyword) {
+
+        int start = (page - 1) * itemsInAPage;
+        int count = itemsInAPage;
+
+        Map<String, Object> args = new HashMap<>();
+        args.put("searchKeyword", searchKeyword);
+        args.put("count", count);
+        args.put("start", start);
+
+        return articleDao.getForPrintArticles(args);
+    }
+
+
 }

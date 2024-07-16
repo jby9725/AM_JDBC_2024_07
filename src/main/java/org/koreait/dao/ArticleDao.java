@@ -6,7 +6,6 @@ package org.koreait.dao;
 
 import org.koreait.Container;
 import org.koreait.dto.Article;
-import org.koreait.session.Session;
 import org.koreait.util.DBUtil;
 import org.koreait.util.SecSql;
 
@@ -119,5 +118,48 @@ public class ArticleDao {
         DBUtil.delete(conn, sql);
 
         return id;
+    }
+
+    public List<Article> getForPrintArticles(Map<String, Object> args) {
+        SecSql sql = new SecSql();
+
+        String searchKeyword = null;
+
+        if (args.containsKey("searchKeyword")) {
+            searchKeyword = (String) args.get("searchKeyword");
+        }
+
+        int start = -1;
+        int count = -1;
+
+        if (args.containsKey("start")) {
+            start = (int) args.get("start");
+        }
+        if (args.containsKey("count")) {
+            count = (int) args.get("count");
+        }
+
+        sql.append("SELECT A.*, M.nickname");
+        sql.append("FROM article A");
+        sql.append("INNER JOIN `member` M");
+        sql.append("ON A.author = M.id");
+        if (searchKeyword.length() > 0) {
+            sql.append("WHERE A.title LIKE CONCAT('%', ?, '%')", searchKeyword);
+        }
+        sql.append("ORDER BY id DESC");
+        if (start != -1) {
+            sql.append("LIMIT ?, ?;", start, count); // limitFrom, limitTake);
+        }
+
+//        System.out.println(sql);
+
+        List<Map<String, Object>> articleListMap = DBUtil.selectRows(Container.getConnection(), sql);
+
+        List<Article> articles = new ArrayList<>();
+
+        for (Map<String, Object> articleMap : articleListMap) {
+            articles.add(new Article(articleMap));
+        }
+        return articles;
     }
 }

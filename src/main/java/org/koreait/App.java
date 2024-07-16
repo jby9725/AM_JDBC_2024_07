@@ -81,6 +81,8 @@ public class App {
         } else if (cmd.equals("article list")) {
             articleController.showAll();
 
+        } else if (cmd.startsWith("article list ")) {
+            articleController.showPages(cmd);
         } else if (cmd.equals("article detail")) {
             articleController.showDetail();
 

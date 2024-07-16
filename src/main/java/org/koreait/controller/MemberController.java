@@ -3,7 +3,6 @@ package org.koreait.controller;
 import org.koreait.Container;
 import org.koreait.dto.Member;
 import org.koreait.service.MemberService;
-import org.koreait.session.Session;
 
 public class MemberController {
 

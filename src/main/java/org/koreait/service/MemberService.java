@@ -3,8 +3,6 @@ package org.koreait.service;
 import org.koreait.dao.MemberDao;
 import org.koreait.dto.Member;
 
-import java.sql.Connection;
-
 public class MemberService {
 
     private MemberDao memberDao;

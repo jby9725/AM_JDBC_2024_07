@@ -29,6 +29,7 @@ public class ArticleController {
 
     public void showAll() {
 
+        // 전체 글 가져오기
         List<Article> articleList = articleService.articleListShowAll();
 
         if (articleList.size() == 0) {
@@ -40,6 +41,41 @@ public class ArticleController {
         for (Article article : articleList) {
             System.out.printf(" %3d /%8s /%10s /%10s / %21s / %21s    \n", article.getId(), article.getTitle(), article.getM_author(), article.getBody(), article.getRegDate(), article.getUpdateDate());
         }
+    }
+
+
+    public void showPages(String cmd) {
+
+        String[] cmdBits = cmd.split(" ");
+
+        int page = 1;
+        String searchKeyword = null;
+
+
+        // 검색어
+        if (cmdBits.length >= 3) {
+            searchKeyword = cmdBits[2];
+        }
+
+        // 몇 페이지?
+        if (cmdBits.length >= 4) {
+            page = Integer.parseInt(cmdBits[3]);
+        }
+
+        // 한 페이지에 10개 씩
+        int itemsInAPage = 10;
+
+        List<Article> articles = articleService.getForPrintArticles(page, itemsInAPage, searchKeyword);
+
+        if (articles.size() == 0) {
+            System.out.println("게시글이 없습니다");
+            return;
+        }
+        System.out.println(" 번호 /    제목    /   작성자   /   내용   /        작성 날짜        /        수정 날짜        / ");
+        for (Article article : articles) {
+            System.out.printf(" %3d /%8s /%10s /%10s / %21s / %21s    \n", article.getId(), article.getTitle(), article.getM_author(), article.getBody(), article.getRegDate(), article.getUpdateDate());
+        }
+
     }
 
     public void showDetail() {
@@ -113,4 +149,5 @@ public class ArticleController {
 
         }
     }
+
 }
