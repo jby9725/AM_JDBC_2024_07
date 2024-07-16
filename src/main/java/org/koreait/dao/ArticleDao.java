@@ -6,6 +6,7 @@ package org.koreait.dao;
 
 import org.koreait.Container;
 import org.koreait.dto.Article;
+import org.koreait.session.Session;
 import org.koreait.util.DBUtil;
 import org.koreait.util.SecSql;
 
@@ -24,6 +25,7 @@ public class ArticleDao {
         sql.append("INSERT INTO article");
         sql.append("SET regDate = NOW(),");
         sql.append("updateDate = NOW(),");
+        sql.append("author = ?,", Container.getSession().getLoginedMemberID());
         sql.append("title = ?,", title);
         sql.append("`body` = ?", body);
 
@@ -38,9 +40,15 @@ public class ArticleDao {
         List<Article> articles = new ArrayList<>();
 
         SecSql sql = new SecSql();
-        sql.append("SELECT *");
-        sql.append("FROM article");
-        sql.append("ORDER BY id DESC");
+//        sql.append("SELECT *");
+//        sql.append("FROM article");
+//        sql.append("ORDER BY id DESC");
+        sql.append("SELECT A.*, M.nickname");
+        sql.append("FROM article A");
+        sql.append("INNER JOIN `member` M");
+        sql.append("ON A.author = M.id");
+        sql.append("ORDER BY A.id DESC");
+
 
         List<Map<String, Object>> articleListMap = DBUtil.selectRows(conn, sql);
 
@@ -54,9 +62,15 @@ public class ArticleDao {
     public Article selectArticle(int id) {
         // 조회...
         SecSql sql = new SecSql();
-        sql.append("SELECT *");
-        sql.append("FROM article");
-        sql.append("WHERE id = ?", id);
+//        sql.append("SELECT *");
+//        sql.append("FROM article");
+//        sql.append("WHERE id = ?", id);
+
+        sql.append("SELECT A.*, M.nickname");
+        sql.append("FROM article A");
+        sql.append("INNER JOIN `member` M");
+        sql.append("ON A.author = M.id");
+        sql.append("WHERE A.id = ?", id);
 
         Map<String, Object> articleMap = DBUtil.selectRow(conn, sql);
 

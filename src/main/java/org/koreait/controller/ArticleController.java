@@ -36,9 +36,9 @@ public class ArticleController {
             return;
         }
 
-        System.out.println(" 번호 /    제목    /     내용 /        작성 날짜        /        수정 날짜        / ");
+        System.out.println(" 번호 /    제목    /   작성자   /   내용   /        작성 날짜        /        수정 날짜        / ");
         for (Article article : articleList) {
-            System.out.printf(" %3d /%8s /%10s / %21s / %21s    \n", article.getId(), article.getTitle(), article.getBody(), article.getRegDate(), article.getUpdateDate());
+            System.out.printf(" %3d /%8s /%10s /%10s / %21s / %21s    \n", article.getId(), article.getTitle(), article.getM_author(), article.getBody(), article.getRegDate(), article.getUpdateDate());
         }
     }
 
@@ -53,6 +53,7 @@ public class ArticleController {
         System.out.println("번호 : " + article.getId());
         System.out.println("작성날짜 : " + article.getRegDate());
         System.out.println("수정날짜 : " + article.getUpdateDate());
+        System.out.println("작성자 : " + article.getM_author());
         System.out.println("제목 : " + article.getTitle());
         System.out.println("내용 : " + article.getBody());
     }
@@ -69,6 +70,9 @@ public class ArticleController {
 
             return;
         } else {
+
+            // 권한 체크 하고 틀리면 return;
+
             System.out.print("게시물의 새 제목 : ");
             String title = Container.getScanner().nextLine().trim();
             System.out.print("게시물의 새 내용 : ");

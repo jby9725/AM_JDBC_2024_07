@@ -158,13 +158,13 @@ public class MemberController {
             }
 
             if (rsMember != null) {
-                Session.setLoginedMember(rsMember); //                loginedMember = rsMember;
-                Session.setLoginedMemberID(rsMember.getId());
+                Container.getSession().setLoginedMember(rsMember); //                loginedMember = rsMember;
+                Container.getSession().setLoginedMemberID(rsMember.getId());
                 break;
             } else {
 //                loginedMember = null;
-                Session.setLoginedMember(null);
-                Session.setLoginedMemberID(-1);
+                Container.getSession().setLoginedMember(null);
+                Container.getSession().setLoginedMemberID(-1);
                 System.out.println("일치하는 정보가 데이터베이스 내에 없습니다. 남은 시도 횟수 : " + (tryMaxCount - tryCount - 1));
             }
             tryCount++;
@@ -182,8 +182,7 @@ public class MemberController {
     }
 
     public void doLogout() {
-        Session.setLoginedMember(null);
-        Session.setLoginedMemberID(-1);
+        Container.getSession().logout();
         System.out.println("로그아웃 되었습니다.");
     }
 

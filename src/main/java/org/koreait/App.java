@@ -38,7 +38,7 @@ public class App {
 
         ///////////////////////////////////////// member /////////////////////////////////
         if (cmd.equals("member join")) {
-            if (Session.getLoginedMemberID() == -1 && Session.getLoginedMember() == null)
+            if (!Container.getSession().isLogined())
 //            if (!loginStatus && loginMember == null)
                 memberController.doJoin();
             else {
@@ -46,18 +46,17 @@ public class App {
                 return 0;
             }
         } else if (cmd.equals("member login")) {
-            if (Session.getLoginedMemberID() == -1 && Session.getLoginedMember() == null) { //            if (!loginStatus && loginMember == null) {
-                Session.setLoginedMember(memberController.doLogin()); // loginMember = memberController.doLogin();
-                Session.setLoginedMemberID(Session.getLoginedMember().getId());
+            if (!Container.getSession().isLogined()) {
+                Container.getSession().setLoginedMember(memberController.doLogin()); // loginMember = memberController.doLogin();
+                Container.getSession().setLoginedMemberID(Container.getSession().getLoginedMember().getId());
 //                System.out.println(Session.getLoginedMember().getUserId());
 //                System.out.println(Session.getLoginedMember().getNickname());
-            }
-            else {
+            } else {
                 System.out.println("로그아웃한 상태여야 합니다.");
                 return 0;
             }
         } else if (cmd.equals("member logout")) {
-            if (Session.getLoginedMemberID() != -1 && Session.getLoginedMember() != null) { // if (loginStatus && loginMember != null) {
+            if (Container.getSession().isLogined()) {
                 memberController.doLogout();
             } else {
                 System.out.println("로그인한 상태여야 합니다.");
@@ -65,8 +64,8 @@ public class App {
 
             }
         } else if (cmd.equals("member profile")) {
-            if (Session.getLoginedMemberID() != -1 && Session.getLoginedMember() != null) { // if (loginStatus && loginMember != null) {
-                memberController.showUserProfile(Session.getLoginedMember());
+            if (Container.getSession().isLogined()) {
+                memberController.showUserProfile(Container.getSession().getLoginedMember());
             } else {
                 System.out.println("로그인한 상태여야 합니다.");
                 return 0;
@@ -74,7 +73,7 @@ public class App {
         }
         ///////////////////////////////////////// article /////////////////////////////////
         else if (cmd.equals("article write")) {
-            if (Session.getLoginedMemberID() != -1 && Session.getLoginedMember() != null) // if (loginStatus && loginMember != null)
+            if (Container.getSession().isLogined())
                 articleController.doWrite();
             else {
                 System.out.println("로그인한 상태여야 합니다.");
@@ -88,7 +87,7 @@ public class App {
             articleController.showDetail();
 
         } else if (cmd.equals("article modify")) {
-            if (Session.getLoginedMemberID() != -1 && Session.getLoginedMember() != null) // if (loginStatus && loginMember != null)
+            if (Container.getSession().isLogined())
                 articleController.doModify();
             else {
                 System.out.println("로그인한 상태여야 합니다.");
@@ -96,7 +95,7 @@ public class App {
             }
 
         } else if (cmd.equals("article delete")) {
-            if (Session.getLoginedMemberID() != -1 && Session.getLoginedMember() != null)// if (loginStatus && loginMember != null)
+            if (Container.getSession().isLogined())
                 articleController.doDelete();
             else {
                 System.out.println("로그인한 상태여야 합니다.");

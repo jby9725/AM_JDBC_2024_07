@@ -1,29 +1,50 @@
 package org.koreait.session;
 
+import org.koreait.Container;
 import org.koreait.dto.Member;
 
 public class Session {
-    private static Member loginedMember;
-    private static int loginedMemberID;
+    private Member loginedMember;
+    private int loginedMemberID;
 
     public Session() {
         loginedMember = null;
         loginedMemberID = -1;
     }
 
-    public static Member getLoginedMember() {
+    public Member getLoginedMember() {
         return loginedMember;
     }
 
-    public static void setLoginedMember(Member loginedMember) {
-        Session.loginedMember = loginedMember;
+    public void setLoginedMember(Member loginedMember) {
+        this.loginedMember = loginedMember;
     }
 
-    public static int getLoginedMemberID() {
+    public int getLoginedMemberID() {
         return loginedMemberID;
     }
 
-    public static void setLoginedMemberID(int loginedMemberID) {
-        Session.loginedMemberID = loginedMemberID;
+    public void setLoginedMemberID(int loginedMemberID) {
+        this.loginedMemberID = loginedMemberID;
+    }
+
+    public void login() {
+
+    }
+
+    public void logout() {
+        this.setLoginedMember(null);
+        this.setLoginedMemberID(-1);
+    }
+
+    public boolean isLogined(){
+//        System.out.println(getLoginedMemberID());
+//        System.out.println(getLoginedMember());
+        if (getLoginedMemberID() == -1 && getLoginedMember() == null) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }
